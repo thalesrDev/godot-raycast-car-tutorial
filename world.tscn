@@ -1,0 +1,85 @@
+[gd_scene load_steps=14 format=3 uid="uid://cun1ma74n24vu"]
+
+[ext_resource type="Texture2D" uid="uid://kw4xrwqowrau" path="res://addons/kenney_prototype_textures/dark/texture_08.png" id="1_mas2x"]
+[ext_resource type="PackedScene" uid="uid://cdhc27kwynww" path="res://car.tscn" id="2_8ggpv"]
+[ext_resource type="Script" path="res://addons/godot-free-look-camera-132062011edfce9399a489756064cfea880dad4c/free_look_camera.gd" id="3_lbo7o"]
+[ext_resource type="Texture2D" uid="uid://b03c06xeqqmmt" path="res://addons/kenney_prototype_textures/dark/texture_01.png" id="4_2r6cv"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_c1vgr"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_fd8pw"]
+sky_material = SubResource("ProceduralSkyMaterial_c1vgr")
+
+[sub_resource type="Environment" id="Environment_3bk0c"]
+background_mode = 2
+sky = SubResource("Sky_fd8pw")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e05p2"]
+albedo_texture = ExtResource("1_mas2x")
+uv1_scale = Vector3(30, 30, 30)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0bftg"]
+size = Vector2(200, 200)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_gf4u3"]
+data = PackedVector3Array(100, 0, 100, -100, 0, 100, 100, 0, -100, -100, 0, 100, -100, 0, -100, 100, 0, -100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3hw13"]
+albedo_texture = ExtResource("4_2r6cv")
+
+[sub_resource type="BoxMesh" id="BoxMesh_y5rla"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_p2311"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_3bk0c")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_e05p2")
+mesh = SubResource("PlaneMesh_0bftg")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ground"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_gf4u3")
+
+[node name="Car" parent="." instance=ExtResource("2_8ggpv")]
+transform = Transform3D(0.999798, -0.0200874, 0, 0.0200874, 0.999798, 0, 0, 0, 1, -1.00918, 2.4358, 23.7742)
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, -0.6, 0)
+suspension_rest_dist = 0.4
+spring_strength = 700.0
+spring_damper = 40.0
+engine_power = 60.0
+front_tire_grip = 0.6
+rear_tire_grip = 0.23
+
+[node name="Camera3D" type="Camera3D" parent="Car"]
+transform = Transform3D(1, 0.000177346, -0.000750226, -1.4782e-05, 0.977411, 0.211349, 0.000770762, -0.211349, 0.97741, -0.0145969, 1.37448, 5.46462)
+current = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.928369, 0.371659, 0, -0.371659, 0.928369, 0, 2.12258, 6.16536)
+current = true
+script = ExtResource("3_lbo7o")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(17.6745, 0, 0, 0, 0.962161, -3.48177, 0, 0.272482, 12.2945, 0, 0.83313, -2.3731)
+material_override = SubResource("StandardMaterial3D_3hw13")
+mesh = SubResource("BoxMesh_y5rla")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_p2311")

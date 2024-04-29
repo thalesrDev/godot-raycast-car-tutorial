@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b3hka1qw3rcmp"]
+
+[ext_resource type="Texture2D" uid="uid://t57yw7jhaf4a" path="res://models/car_DeathRacerUV.png" id="1_tncjp"]
+
+[resource]
+cull_mode = 2
+albedo_texture = ExtResource("1_tncjp")
